@@ -83,8 +83,7 @@ cp -r sddm-theme-mod /usr/share/sddm/themes
 cd $CUR
 
 # misc components
-cp -r $CUR/misc/kvantum/Kvantum /etc
-echo -e "[General]\ntheme=Windows7Aero" > /usr/share/Kvantum/kvantum.kvconfig
+cp -r $CUR/misc/kvantum/Kvantum /usr/share/
 
 cd $CUR/misc/libplasma
 # sh install.sh --ninja
