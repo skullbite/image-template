@@ -250,7 +250,6 @@ chmod +x ./install.sh
 ./install.sh -s -q
 
 sed -i "s/Theme=bgrt/Theme=PlymouthVista/g" /usr/share/plymouth/plymouthd.defaults
-
 rm /usr/share/wayland-sessions/plasma.desktop
 
 # dnf5 -y copr enable ublue-os/staging
