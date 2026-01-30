@@ -14,7 +14,7 @@ install_component () {
     kpackagetool6 -g -t "$2" -u "$1"
 }
 
-rsync -rvK /ctx/system_files/shared/ /
+rsync -rvK /ctx/sys /
 
 git clone --depth 1 https://gitgud.io/Gamer95875/Windows-7-Better /usr/share/themes/Windows-7-Better
 
