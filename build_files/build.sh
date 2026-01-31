@@ -247,14 +247,16 @@ update-mime-database /usr/share/mime
 cp $CUR/misc/branding/kcminfo.png /usr/share/fed7/logo.png
 kwriteconfig6 --file /etc/xdg/kcm-about-distrorc --group General --key LogoPath /etc/kdedefaults/kcminfo.png
 
-git clone https://github.com/furkrn/PlymouthVista
-cd PlymouthVista
-chmod +x ./compile.sh
-chmod +x ./install.sh
-./compile.sh
-./install.sh -s -q
+# TODO: Install script is very much user-level.
+# git clone https://github.com/furkrn/PlymouthVista
+# cd PlymouthVista
+# chmod +x ./compile.sh
+# chmod +x ./install.sh
+# ./compile.sh
+# ./install.sh -s -q
 
 sed -i "s/Theme=bgrt/Theme=PlymouthVista/g" /usr/share/plymouth/plymouthd.defaults
+sed -i "s/#Current=01-breeze-fedora/Current=sddm-theme-mod/g" /etc/sddm.conf
 rm /usr/share/wayland-sessions/plasma.desktop
 
 # dnf5 -y copr enable ublue-os/staging
