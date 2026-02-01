@@ -257,6 +257,7 @@ kwriteconfig6 --file /etc/xdg/kcm-about-distrorc --group General --key LogoPath 
 
 sed -i "s/Theme=bgrt/Theme=PlymouthVista/g" /usr/share/plymouth/plymouthd.defaults
 sed -i "s/#Current=01-breeze-fedora/Current=sddm-theme-mod/g" /etc/sddm.conf
+#
 rm /usr/share/wayland-sessions/plasma.desktop
 
 # dnf5 -y copr enable ublue-os/staging
