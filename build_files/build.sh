@@ -281,7 +281,7 @@ cp -r $(pwd) /usr/share/plymouth/themes/PlymouthVista
 # ./compile.sh
 # ./install.sh -s -q
 dracut --force --regenerate-all --omit plymouth --verbose
-
+plymouth-set-default-theme -R PlymouthVista
 sed -i "s/Theme=bgrt/Theme=PlymouthVista/g" /usr/share/plymouth/plymouthd.defaults
 sed -i "s/#Current=01-breeze-fedora/Current=sddm-theme-mod/g" /etc/sddm.conf
 #
