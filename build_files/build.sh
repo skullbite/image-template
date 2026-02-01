@@ -18,12 +18,13 @@ rsync -rvK /ctx/sys/ /
 
 # git clone --depth 1 https://gitgud.io/Gamer95875/Windows-7-Better /usr/share/themes/Windows-7-Better
 git clone --depth 1 https://github.com/mrbvrz/segoe-ui-linux /tmp/segoe
+curl -o /usr/share/fonts/lucon.ttf -SsL https://github.com/FSKiller/Microsoft-Fonts/blob/main/lucon.ttf
 
 cp -r /tmp/segoe/font /usr/share/fonts
 
 fc-cache -f -r -v
 
-dnf install --skip-broken -y ninja plasma-workspace-devel unzip kvantum qt6-qtmultimedia-devel qt6-qt5compat-devel libplasma-devel qt6-qtbase-devel qt6-qtwayland-devel plasma-activities-devel kf6-kpackage-devel kf6-kglobalaccel-devel qt6-qtsvg-devel wayland-devel plasma-wayland-protocols kf6-ksvg-devel kf6-kcrash-devel kf6-kguiaddons-devel kf6-kcmutils-devel kf6-kio-devel kdecoration-devel kf6-ki18n-devel kf6-knotifications-devel kf6-kirigami-devel kf6-kiconthemes-devel cmake gmp-ecm-devel kf5-plasma-devel libepoxy-devel kwin-devel kf6-karchive kf6-karchive-devel plasma-wayland-protocols-devel qt6-qtbase-private-devel qt6-qtbase-devel kf6-knewstuff-devel kf6-knotifyconfig-devel kf6-attica-devel kf6-krunner-devel kf6-kdbusaddons-devel kf6-sonnet-devel plasma5support-devel plasma-activities-stats-devel polkit-qt6-1-devel qt-devel libdrm-devel kf6-kitemmodels-devel kf6-kstatusnotifieritem-devel qt6-qtmultimedia-devel
+dnf install --skip-broken -y ninja plasma-workspace-devel unzip kvantum qt6-qtmultimedia-devel qt6-qt5compat-devel libplasma-devel qt6-qtbase-devel qt6-qtwayland-devel plasma-activities-devel kf6-kpackage-devel kf6-kglobalaccel-devel qt6-qtsvg-devel wayland-devel plasma-wayland-protocols kf6-ksvg-devel kf6-kcrash-devel kf6-kguiaddons-devel kf6-kcmutils-devel kf6-kio-devel kdecoration-devel kf6-ki18n-devel kf6-knotifications-devel kf6-kirigami-devel kf6-kiconthemes-devel cmake gmp-ecm-devel kf5-plasma-devel libepoxy-devel kwin-devel kf6-karchive kf6-karchive-devel plasma-wayland-protocols-devel qt6-qtbase-private-devel qt6-qtbase-devel kf6-knewstuff-devel kf6-knotifyconfig-devel kf6-attica-devel kf6-krunner-devel kf6-kdbusaddons-devel kf6-sonnet-devel plasma5support-devel plasma-activities-stats-devel polkit-qt6-1-devel qt-devel libdrm-devel kf6-kitemmodels-devel kf6-kstatusnotifieritem-devel qt6-qtmultimedia-devel plymouth-scripts plymouth-plugin-script ImageMagick
 
 git clone --depth 1 https://gitgud.io/snailatte/7s-notepad /tmp/7np
 cd /tmp/7np
@@ -248,12 +249,38 @@ cp $CUR/misc/branding/kcminfo.png /usr/share/fed7/logo.png
 kwriteconfig6 --file /etc/xdg/kcm-about-distrorc --group General --key LogoPath /etc/kdedefaults/kcminfo.png
 
 # TODO: Install script is very much user-level.
-# git clone https://github.com/furkrn/PlymouthVista
-# cd PlymouthVista
+git clone https://github.com/furkrn/PlymouthVista /tmp/PlymouthVista
+CUR=/tmp/PlymouthVista
+cd $CUR
+sh compile.sh
+chmod +x PlymouthVista.script
+
+cp $CUR/lucon_disable_anti_aliasing.conf /etc/fonts/conf.d/10-lucon_disable_anti_aliasing.conf
+sh gen_blur.sh
+
+cp $CUR/systemd/system/update-plymouth-vista-state-boot.service /etc/systemd/system
+cp $CUR/systemd/system/update-plymouth-vista-state-quit.service /etc/systemd/system
+cp $CUR/systemd/hibernation/plymouth-vista-hibernate.service /etc/systemd/system
+cp $CUR/systemd/hibernation/plymouth-vista-resume-from-hibernation.service /etc/systemd/system
+
+cp $CUR/systemd/user/update-plymouth-vista-state-logon.service /etc/systemd/user
+
+
+# TODO: Bound this variable to a config value, either thru 7just or system settings
+sed "s/\$\(.*\)\"/10\"/g" -i systemd/slowdown/plymouth-vista-slow-boot-animation.service
+cat systemd/slowdown/plymouth-vista-slow-boot-animation.service
+cp systemd/slowdown/plymouth-vista-slow-boot-animation.service /etc/systemd/system
+
+systemctl enable update-plymouth-vista-state-{boot,quit}.service
+systemctl enable plymouth-vista-{hibernate,resume-from-hibernation}.service
+systemctl enable plymouth-vista-slow-boot-animation.service
+
+cp -r $(pwd) /usr/share/plymouth/themes/PlymouthVista
 # chmod +x ./compile.sh
 # chmod +x ./install.sh
 # ./compile.sh
 # ./install.sh -s -q
+dracut --force --regenerate-all --omit plymouth --verbose
 
 sed -i "s/Theme=bgrt/Theme=PlymouthVista/g" /usr/share/plymouth/plymouthd.defaults
 sed -i "s/#Current=01-breeze-fedora/Current=sddm-theme-mod/g" /etc/sddm.conf
@@ -268,5 +295,6 @@ rm /usr/share/wayland-sessions/plasma.desktop
 #### Example for enabling a System Unit File
 
 systemctl enable podman.socket
+systemctl enable kvantum-config-write.service
 
 dnf autoremove -y

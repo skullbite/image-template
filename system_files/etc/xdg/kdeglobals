@@ -1,3 +1,9 @@
+[General]
+font=Segoe UI,10,-1,5,400,0,0,0,0,0,0,0,0,0,0,1
+menuFont=Segoe UI,10,-1,5,400,0,0,0,0,0,0,0,0,0,0,1
+smallestReadableFont=Segoe UI,8,-1,5,400,0,0,0,0,0,0,0,0,0,0,1
+toolBarFont=Segoe UI,10,-1,5,400,0,0,0,0,0,0,0,0,0,0,1
+
 [KDE]
 LookAndFeelPackage=authui7
 

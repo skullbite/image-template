@@ -1,0 +1,9 @@
+[Unit]
+Description=Write Kvantum config for current user if necessary
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/7just _write-kvantum-config
+
+[Install]
+WantedBy=multi-user.target

@@ -1,2 +1,12 @@
 test:
    echo "hi :)"
+
+
+_write-kvantum-config:
+    #!/bin/bash
+    kv_path=$HOME/.config/Kvantum/kvantum.kvconfig
+    if [[ ! -f $kv_path ]]; then
+        echo -e "[General]\ntheme=Windows7Aero" > kv_path
+    else
+        echo "File already exists"
+    fi
