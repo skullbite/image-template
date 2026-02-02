@@ -1,6 +1,31 @@
 test:
    echo "hi :)"
 
+set-bash-profile $option="windows":
+   #!/bin/bash
+   link_path=$HOME/.bashrc.d/fed7-profile
+   target_path=/usr/share/fed7/bash-profiles/$option
+   if [[ $option == "off" ]]; then
+       rm $link_path
+       exit
+   fi
+
+   if [[ ! -d $HOME/.bashrc.d ]]; then
+       mkdir $HOME/.bashrc.d
+   fi
+
+   if [[ ! -f $target_path ]]; then
+       echo "{{ RED }}$option is not valid {{ NORMAL }}"
+       echo "$(ls /usr/share/fed7/bash-profiles) off"
+       exit 1
+   fi
+
+   if [[ -f $link_path ]]; then
+       rm $link_path
+   fi
+
+   ln -s $target_path $link_path
+   echo "{{GREEN}}Bash profile set."
 
 _write-kvantum-config:
     #!/bin/bash
