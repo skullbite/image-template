@@ -2,13 +2,6 @@
 
 set -ouex pipefail
 
-### Install packages
-
-# Packages can be installed from any enabled yum repo on the image.
-# RPMfusion repos are available by default in ublue main images
-# List of rpmfusion packages can be found here:
-# https://mirrors.rpmfusion.org/mirrorlist?path=free/fedora/updates/39/x86_64/repoview/index.html&protocol=https&redirect=1
-
 install_component () {
     kpackagetool6 -g -t "$2" -i "$1" || \
     kpackagetool6 -g -t "$2" -u "$1"
@@ -24,7 +17,7 @@ cp -r /tmp/segoe/font /usr/share/fonts
 
 fc-cache -f -r -v
 
-dnf install --skip-broken -y ninja plasma-workspace-devel unzip kvantum qt6-qtmultimedia-devel qt6-qt5compat-devel libplasma-devel qt6-qtbase-devel qt6-qtwayland-devel plasma-activities-devel kf6-kpackage-devel kf6-kglobalaccel-devel qt6-qtsvg-devel wayland-devel plasma-wayland-protocols kf6-ksvg-devel kf6-kcrash-devel kf6-kguiaddons-devel kf6-kcmutils-devel kf6-kio-devel kdecoration-devel kf6-ki18n-devel kf6-knotifications-devel kf6-kirigami-devel kf6-kiconthemes-devel cmake gmp-ecm-devel kf5-plasma-devel libepoxy-devel kwin-devel kf6-karchive kf6-karchive-devel plasma-wayland-protocols-devel qt6-qtbase-private-devel qt6-qtbase-devel kf6-knewstuff-devel kf6-knotifyconfig-devel kf6-attica-devel kf6-krunner-devel kf6-kdbusaddons-devel kf6-sonnet-devel plasma5support-devel plasma-activities-stats-devel polkit-qt6-1-devel qt-devel libdrm-devel kf6-kitemmodels-devel kf6-kstatusnotifieritem-devel qt6-qtmultimedia-devel plymouth-scripts plymouth-plugin-script ImageMagick steam tailscale
+dnf install --skip-broken -y ninja plasma-workspace-devel unzip kvantum qt6-qtmultimedia-devel qt6-qt5compat-devel libplasma-devel qt6-qtbase-devel qt6-qtwayland-devel plasma-activities-devel kf6-kpackage-devel kf6-kglobalaccel-devel qt6-qtsvg-devel wayland-devel plasma-wayland-protocols kf6-ksvg-devel kf6-kcrash-devel kf6-kguiaddons-devel kf6-kcmutils-devel kf6-kio-devel kdecoration-devel kf6-ki18n-devel kf6-knotifications-devel kf6-kirigami-devel kf6-kiconthemes-devel cmake gmp-ecm-devel kf5-plasma-devel libepoxy-devel kwin-devel kf6-karchive kf6-karchive-devel plasma-wayland-protocols-devel qt6-qtbase-private-devel qt6-qtbase-devel kf6-knewstuff-devel kf6-knotifyconfig-devel kf6-attica-devel kf6-krunner-devel kf6-kdbusaddons-devel kf6-sonnet-devel plasma5support-devel plasma-activities-stats-devel polkit-qt6-1-devel qt-devel libdrm-devel kf6-kitemmodels-devel kf6-kstatusnotifieritem-devel qt6-qtmultimedia-devel plymouth-scripts plymouth-plugin-script ImageMagick steam tailscale fastfetch
 
 git clone --depth 1 https://gitgud.io/snailatte/7s-notepad /tmp/7np
 cd /tmp/7np
@@ -39,7 +32,7 @@ cd /tmp/7pv
 sh build.sh
 cp -r ./installation/hicolor /usr/share/icons/
 cp -f ./installation/photoview.desktop /usr/share/applications
-cat /usr/share/applications/photoview.desktop | sed "s/~\/.local/\/usr/g" > /usr/share/applications/photoview.desktop
+cat /usr/share/applications/photoview.desktop | sed "s/\~\/.local/\/usr/g" > /usr/share/applications/photoview.desktop
 cp -f ./build/photoview /usr/bin
 
 
@@ -115,8 +108,16 @@ cd $CUR/misc/libplasma
 # TODO: plasmashell core dumps in build context?
 # OUTPUT=$(plasmashell --version)
 # IFS=' ' read -a array <<< "$OUTPUT"
+VERSION=""
 
-VERSION="6.5.5"
+for i in $(rpm -qa | grep plasma-desktop); do
+    if [[ $i == *"-doc"* ]]; then
+	    echo "Skipping"
+	else
+	    VERSION=$(echo $i | sed "s/plasma-desktop-//g" | sed "s/-.*//g")
+	fi
+done
+
 URL="https://invent.kde.org/plasma/libplasma/-/archive/v${VERSION}/libplasma-v${VERSION}.tar.gz"
 ARCHIVE="libplasma-v${VERSION}.tar.gz"
 SRCDIR="libplasma-v${VERSION}"
@@ -246,8 +247,9 @@ done
 update-mime-database /usr/share/mime
 
 cp $CUR/misc/branding/kcminfo.png /usr/share/fed7/logo.png
-kwriteconfig6 --file /etc/xdg/kcm-about-distrorc --group General --key LogoPath /etc/kdedefaults/kcminfo.png
 
+sed -i "s/Theme=bgrt/Theme=PlymouthVista/g" /usr/share/plymouth/plymouthd.defaults
+sed -i "s/#Current=01-breeze-fedora/Current=sddm-theme-mod/g" /etc/sddm.conf
 # TODO: Install script is very much user-level.
 git clone https://github.com/furkrn/PlymouthVista /tmp/PlymouthVista
 CUR=/tmp/PlymouthVista
@@ -274,25 +276,15 @@ cp systemd/slowdown/plymouth-vista-slow-boot-animation.service /etc/systemd/syst
 systemctl enable update-plymouth-vista-state-{boot,quit}.service
 systemctl enable plymouth-vista-{hibernate,resume-from-hibernation}.service
 systemctl enable plymouth-vista-slow-boot-animation.service
-
+ 
 cp -r $(pwd) /usr/share/plymouth/themes/PlymouthVista
 # chmod +x ./compile.sh
 # chmod +x ./install.sh
 # ./compile.sh
 # ./install.sh -s -q
-dracut --force --regenerate-all --omit plymouth --verbose
-# plymouth-set-default-theme -R PlymouthVista
-sed -i "s/Theme=bgrt/Theme=PlymouthVista/g" /usr/share/plymouth/plymouthd.defaults
-sed -i "s/#Current=01-breeze-fedora/Current=sddm-theme-mod/g" /etc/sddm.conf
-#
+dracut --force --omit plymouth --regenerate-all --verbose
+plymouth-set-default-theme -R PlymouthVista
 rm /usr/share/wayland-sessions/plasma.desktop
-
-# dnf5 -y copr enable ublue-os/staging
-# dnf5 -y install package
-# Disable COPRs so they don't end up enabled on the final image:
-# dnf5 -y copr disable ublue-os/staging
-
-#### Example for enabling a System Unit File
 
 systemctl enable podman.socket
 systemctl enable kvantum-config-write.service
