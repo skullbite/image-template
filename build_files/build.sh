@@ -282,8 +282,8 @@ cp -r $(pwd) /usr/share/plymouth/themes/PlymouthVista
 # chmod +x ./install.sh
 # ./compile.sh
 # ./install.sh -s -q
-dracut --force --omit plymouth --regenerate-all --verbose
-plymouth-set-default-theme -R PlymouthVista
+plymouth-set-default-theme PlymouthVista
+dracut --force --regenerate-all --verbose
 rm /usr/share/wayland-sessions/plasma.desktop
 
 systemctl enable podman.socket
