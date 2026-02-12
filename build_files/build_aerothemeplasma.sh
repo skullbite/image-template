@@ -9,6 +9,7 @@ install_component () {
 
 cd /tmp
 git clone --depth 1 https://github.com/mrbvrz/segoe-ui-linux /tmp/segoe
+curl -o /usr/share/fonts/lucon.ttf -SsL https://github.com/FSKiller/Microsoft-Fonts/blob/main/lucon.ttf
 curl -o /tmp/tv.zip https://www.yohng.com/files/TerminalVector.zip
 unzip tv.zip
 
@@ -101,6 +102,7 @@ for i in $(rpm -qa | grep plasma-desktop); do
 	fi
 done
 
+# Polkit agent theme installer. nearly verbatim
 URL="https://invent.kde.org/plasma/libplasma/-/archive/v${VERSION}/libplasma-v${VERSION}.tar.gz"
 ARCHIVE="libplasma-v${VERSION}.tar.gz"
 SRCDIR="libplasma-v${VERSION}"
@@ -229,46 +231,10 @@ done
 
 update-mime-database /usr/share/mime
 
-cp $CUR/misc/branding/kcminfo.png /usr/share/k7/logo.png
+cp $CUR/misc/branding/kcminfo.png /usr/share/kin7/logo.png
 
 sed -i "s/Theme=bgrt/Theme=PlymouthVista/g" /usr/share/plymouth/plymouthd.defaults
-echo -e "[Theme]\nCurrent=sddm-theme-mod" > /etc/sddm.conf
-# TODO: Install script is very much user-level.
-# git clone https://github.com/furkrn/PlymouthVista /tmp/PlymouthVista
-# CUR=/tmp/PlymouthVista
-# cd $CUR
-# sh compile.sh
-# dracut --force --omit plymouth --regenerate-all --verbose
-# chmod +x PlymouthVista.script
-
-# cp $CUR/lucon_disable_anti_aliasing.conf /etc/fonts/conf.d/10-lucon_disable_anti_aliasing.conf
-# sh gen_blur.sh
-
-# cp $CUR/systemd/system/update-plymouth-vista-state-boot.service /etc/systemd/system
-# cp $CUR/systemd/system/update-plymouth-vista-state-quit.service /etc/systemd/system
-# cp $CUR/systemd/hibernation/plymouth-vista-hibernate.service /etc/systemd/system
-# cp $CUR/systemd/hibernation/plymouth-vista-resume-from-hibernation.service /etc/systemd/system
-
-# cp $CUR/systemd/user/update-plymouth-vista-state-logon.service /etc/systemd/user
-
-
-# TODO: Bound this variable to a config value, either thru 7just or system settings
-# sed "s/\$\(.*\)\"/10\"/g" -i systemd/slowdown/plymouth-vista-slow-boot-animation.service
-# cat systemd/slowdown/plymouth-vista-slow-boot-animation.service
-# cp systemd/slowdown/plymouth-vista-slow-boot-animation.service /etc/systemd/system
-
-# systemctl enable update-plymouth-vista-state-{boot,quit}.service
-# systemctl enable plymouth-vista-{hibernate,resume-from-hibernation}.service
-# systemctl enable plymouth-vista-slow-boot-animation.service
- 
-# cp -r $(pwd) /usr/share/plymouth/themes/PlymouthVista
-# chmod +x ./compile.sh
-# chmod +x ./install.sh
-# ./compile.sh
-# ./install.sh -s -q
-# plymouth-set-default-theme -R PlymouthVista
-# rm /usr/share/wayland-sessions/plasma.desktop
-
+# echo -e "[Theme]\nCurrent=sddm-theme-mod" > /etc/sddm.conf
 
 systemctl enable kvantum-config-write.service
 

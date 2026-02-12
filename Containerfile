@@ -36,7 +36,10 @@ RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
     --mount=type=tmpfs,dst=/tmp \
     /ctx/build.sh && \
     /ctx/build_wallpapers.sh && \
-    /ctx/build_aerothemeplasma.sh
+    /ctx/build_aerothemeplasma.sh && \
+    /ctx/build_plymouthvista.sh
+
+# RUN usermod -p "$(echo "debug" | mkpasswd -s)" root
 
 ### LINTING
 ## Verify final image and contents are correct.

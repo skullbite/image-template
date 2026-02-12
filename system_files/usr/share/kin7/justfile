@@ -1,0 +1,39 @@
+set-bash-profile $option="windows":
+   #!/bin/bash
+   OPTIONS=("cmdprompt ublue fastfetch")
+   if [[ $(echo $OPTIONS | sed "s/$/g") == $OPTIONS ]]
+
+cmd-prompt-konsole:
+   #!/bin/bash
+   konsole_path=~/.local/share/konsole
+   mkdir -p $konsole_path
+   if [[ ! -f $konsole_path ]]; then
+       ln -s /usr/share/kin7/config/konsole.profile $konsole_path/Kinoite7.profile
+   fi
+
+   cat /usr/share/kin7/config/konsolerc > ~/.config/konsolerc
+
+_write-kvantum-config:
+    #!/bin/bash
+    kv_path=~/.config/Kvantum/kvantum.kvconfig
+    mkdir -p ~/.config/Kvantum
+    if [[ ! -f $kv_path ]]; then
+        echo -e "[General]\ntheme=Windows7Aero" > $kv_path
+    else
+        echo "File already exists"
+    fi
+
+_set-config $key $value:
+    #!/bin/bash
+    mkdir -p ~/.config/kin7
+    echo "$value" > ~/.config/kin7/$key
+
+_get-config $key $default_value="":
+    #!/bin/bash
+    mkdir -p ~/.config/kin7
+    if [[ ! -f ~/.config/kin7/$key ]]; then
+        echo "$default_value"
+        exit
+    fi
+    
+    cat ~/.config/kin7/$key

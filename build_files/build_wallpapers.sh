@@ -10,6 +10,10 @@ set -ouex pipefail
 # https://github.com/CachyOS/cachyos-wallpapers
 
 make_wallpaper () {
+    # $1 = Display name
+    # $2 = Path to image
+    # $3 = Default size of image
+    # $4 = Author of wallpaper
     WP_PATH="/usr/share/wallpapers/$1/contents/images"
     IMG_SUFFIX=${2##*.}
     mkdir -p "$WP_PATH"
@@ -20,7 +24,7 @@ make_wallpaper () {
         ln -s "$WP_PATH/$3.$IMG_SUFFIX" "$WP_PATH/$ii.$IMG_SUFFIX"
     done
 
-    echo {\"KPlugin\":{\"Name\":\"$1\",\"Authors\":[{\"Name\":\"$4\"}]}} > "/usr/share/wallpapers/$DISPLAY_NAME/metadata.json"
+    echo "{\"KPlugin\":{\"Name\":\"$1\",\"Authors\":[{\"Name\":\"$4\"}]}}" > "/usr/share/wallpapers/$1/metadata.json"
 }
 
 rm -f /usr/share/wallpapers/Default

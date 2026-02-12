@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=System Update
+Comment=Update your Kin7 system
+Exec=ujust update
+Icon=system-software-update
+Terminal=true
+Type=Application
+Categories=System;
