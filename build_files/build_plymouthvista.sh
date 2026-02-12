@@ -8,7 +8,7 @@ git clone https://github.com/furkrn/PlymouthVista /tmp/PlymouthVista
 CUR=/tmp/PlymouthVista
 cd $CUR
 sh compile.sh
-# dracut --force --omit plymouth --regenerate-all --verbose
+dracut --force --omit plymouth --regenerate-all --verbose
 chmod +x PlymouthVista.script
 # sh pv_conf.sh -s AuthuiStyle -v 7 -i PlymouthVista.script
 
@@ -33,7 +33,7 @@ cp -r $(pwd) /usr/share/plymouth/themes/PlymouthVista
 #chmod +x ./install.sh
 #./compile.sh
 #./install.sh -s -q
-
-plymouth-set-default-theme -R PlymouthVista
 sh omitPlymouth.sh
+plymouth-set-default-theme -R PlymouthVista
+
 rm /usr/share/wayland-sessions/plasma.desktop
