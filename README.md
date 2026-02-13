@@ -42,4 +42,4 @@ sudo bootc switch ghcr.io/skullbite/kinoite-7:latest
 
 This image is built on top of [UBlue's kinoite image](https://github.com/ublue-os/main), which only includes the (GUI) apps that come by default in KDE Plasma under Fedora Atomic. (aside from Steam)
 
-Aside from that, the intent of Kinioite 7 is to include as many projects associated with ATP as possible, some being Sevulet and Gadgets.
+Aside from that, the intent of Kinioite 7 is to include as many projects associated with ATP as possible, some being Sevulet and AeroUserChrome.
