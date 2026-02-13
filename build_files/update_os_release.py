@@ -11,7 +11,7 @@ with open("/etc/os-release", "r") as file:
     edit_key("NAME", "Kinoite 7")
     edit_key("PRETTY_NAME", get_key("NAME") + " " + get_key("VERSION"))
     edit_key("DEFAULT_HOSTNAME", "kinoite7")
-    edit_key("HOME_URL", "https://github.com/skullbite/kde-7")
+    edit_key("HOME_URL", "https://github.com/skullbite/kinoite-7")
 
 with open("/etc/os-release", "w") as file:
     file.write("".join(lines))
