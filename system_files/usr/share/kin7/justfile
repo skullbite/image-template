@@ -75,10 +75,13 @@ _kin7-init:
     set -e pipefail
 
     init_file=~/.config/kin7-initialized
-    if [[ -f $init_file ]]; then exit fi
+    if [[ -f $init_file ]]; then 
+        exit 
+    fi
 
     7just _write-kvantum-config
     mkdir -p ~/.config
+    # doesn't work here
     touch ~/.config/no-show-user-motd
     touch $init_file
 
@@ -87,6 +90,7 @@ _write-kvantum-config:
     #!/bin/bash
     set -e pipefail
 
+    # WHY WONT THIS WORK IN /usr/share
     kv_path=~/.config/Kvantum/kvantum.kvconfig
     mkdir -p ~/.config/Kvantum
     if [[ ! -f $kv_path ]]; then

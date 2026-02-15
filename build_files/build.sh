@@ -22,5 +22,8 @@ dnf install -y fastfetch steam tailscale gum glow
 # }
 # EOF
 
+7just --completions > /etc/bash_completion.d/7just
+chmod +x /etc/bash_completion.d/7just
+
 systemctl enable podman.socket
 systemctl enable kin7-init.service
