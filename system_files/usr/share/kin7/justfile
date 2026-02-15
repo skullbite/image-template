@@ -1,12 +1,16 @@
+_default:
+    @7just --list
+    
 set-bash-profile $option="choose":
    #!/bin/bash
+   set -e pipefail
    OPTIONS=("cmdprompt fastfetch off")
    if [[ $option == "choose" ]]; then
        echo -e "cmdprompt = Win7 command prompt.\nublue = Ublue's Message of the Day prompt\nfastfetch = Fastfetch\noff = No prompt"
        option=$(gum choose $OPTIONS)
    fi
 
-   if [[ $(echo $OPTIONS | sed "s/$option//g") == $OPTIONS ]]; then
+   if [[ $(echo $OPTIONS | sed "s/$option/ /g") == $OPTIONS ]]; then
        echo "Invalid option '$option':"
        echo $OPTIONS
        exit 1
@@ -25,6 +29,8 @@ set-bash-profile $option="choose":
 
 toggle-win7-ps1:
     #!/bin/bash
+    set -e pipefail
+
     if [[ $(7just _get-config win-7-prompt) == "1" ]]; then
         7just _set-config win-7-prompt 0
         echo "{{GREEN+BOLD}}Command Prompt PS1 disabled. Open a new terminal to see changes.{{NORMAL}}"
@@ -36,6 +42,8 @@ toggle-win7-ps1:
 
 toggle-fastfetch-alias:
     #!/bin/bash
+    set -e pipefail
+
     if [[ $(7just _get-config no-fastfetch-alias) == "1" ]]; then
         7just _set-config  no-fastfetch-alias 0
         echo "{{GREEN+BOLD}}Fastfetch alias disabled.{{NORMAL}}"
@@ -46,6 +54,8 @@ toggle-fastfetch-alias:
 
 set-cmd-prompt-konsole-theme:
    #!/bin/bash
+   set -e pipefail
+
    konsole_path=~/.local/share/konsole/
 
    gum confirm "{{YELLOW+BOLD}}This will overwrite your konsole config. Would you like to continue?{{NORMAL}}"
@@ -62,6 +72,8 @@ set-cmd-prompt-konsole-theme:
 
 _kin7-init:
     #!/bin/bash
+    set -e pipefail
+
     init_file=~/.config/kin7-initialized
     if [[ -f $init_file ]]; then exit fi
 
@@ -73,6 +85,8 @@ _kin7-init:
 
 _write-kvantum-config:
     #!/bin/bash
+    set -e pipefail
+
     kv_path=~/.config/Kvantum/kvantum.kvconfig
     mkdir -p ~/.config/Kvantum
     if [[ ! -f $kv_path ]]; then
